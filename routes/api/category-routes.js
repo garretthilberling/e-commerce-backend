@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Category, Product, Tag, ProductTag } = require('../../models');
+const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
   .then((categoryInput) => res.json(categoryInput))
     .catch((err) => {
       console.log(err);
-      res.status(400).json(err);
+      res.status(500).json(err);
     });
 });
 
@@ -60,10 +60,15 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then((categoryInput) => res.json(categoryInput))
+  .then((categoryInput) => {
+    if (!categoryInput) {
+      res.status(404).json({ message: 'Category not found' });
+    }
+   res.json(categoryInput)
+  })  
     .catch((err) => {
       console.log(err);
-      res.status(400).json(err);
+      res.status(500).json(err);
     });
 });
 
@@ -77,7 +82,7 @@ router.delete('/:id', (req, res) => {
   .then((remvResonse) => res.json(remvResonse))
     .catch((err) => {
       console.log(err);
-      res.status(400).json(err);
+      res.status(500).json(err);
     });
 });
 

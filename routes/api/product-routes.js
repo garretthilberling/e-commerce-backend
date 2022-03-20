@@ -1,10 +1,10 @@
-const router = require('express').Router();
-const { Product, Category, Tag, ProductTag } = require('../../models');
+const router = require("express").Router();
+const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
   Product.findAll({
@@ -14,25 +14,25 @@ router.get('/', (req, res) => {
       },
       {
         model: Tag,
-        through: ProductTag
+        through: ProductTag,
+      },
+    ],
+  })
+    .then((dbProductData) => {
+      if (!dbProductData) {
+        res.status(404).json({ message: "No user found with this id" });
+        return;
       }
-    ]
-  })
-  .then(dbProductData => {
-    if (!dbProductData) {
-      res.status(404).json({ message: 'No user found with this id' });
-      return;
-    }
-    res.json(dbProductData);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+      res.json(dbProductData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
   Product.findOne({
@@ -42,41 +42,46 @@ router.get('/:id', (req, res) => {
       },
       {
         model: Tag,
-        through: ProductTag
-      }
+        through: ProductTag,
+      },
     ],
     where: {
-      id: req.params.id
-    }
+      id: req.params.id,
+    },
   })
-  .then(dbProductData => {
-    if (!dbProductData) {
-      res.status(404).json({ message: 'No user found with this id' });
-      return;
-    }
-    res.json(dbProductData);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json(err);
-  });
+    .then((dbProductData) => {
+      if (!dbProductData) {
+        res.status(404).json({ message: "No product found with this id" });
+        return;
+      }
+      res.json(dbProductData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 // create new product
-router.post('/', (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
+router.post("/", (req, res) => {
   Product.create({
     product_name: req.body.product_name,
     price: req.body.price,
     stock: req.body.stock,
-    //left off here
+    category_id: req.body.category_id,
+    tagIds: [
+      {
+        include: [
+          {
+            model: Tag,
+            through: ProductTag,
+            where: {
+              tag_id: req.body.tag_id
+            }
+          },
+        ],
+      },
+    ],
   })
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -100,7 +105,7 @@ router.post('/', (req, res) => {
 });
 
 // update product
-router.put('/:id', (req, res) => {
+router.put("/:id", (req, res) => {
   // update product data
   Product.update(req.body, {
     where: {
@@ -141,8 +146,18 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then((remvResonse) => res.json(remvResonse))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
