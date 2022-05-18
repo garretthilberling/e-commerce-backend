@@ -8,7 +8,7 @@
 * [Credits](#Credits)
 
 ## Description
-E-Commerce Backend is a simple backend API designed to help store owners store, update, and delete products, product categories, and product tags (descriptive key words). The languages and technologies used to build this application are JavaScript, ES6, Node.js, MySQL, MySQL2, Express.js, & Sequelize. 
+E-Commerce Backend is a simple backend API designed to help store owners store, update, and delete products, product categories, and product tags (descriptive key words). The languages and technologies used to build this application are JavaScript ES6+, Node.js, MySQL, MySQL2, Express.js, & Sequelize. 
 
 ## Usage
 Here is a video demonstration of how to use this app:
