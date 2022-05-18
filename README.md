@@ -13,7 +13,11 @@ E-Commerce Backend is a simple backend API designed to help store owners store, 
 ## Usage
 Here is a video demonstration of how to use this app:
 
-[![video demonstration](./assets/img/application-screenshot.png)](https://drive.google.com/file/d/1QX4YO3KV35cnioja1EpMp88NVuJafgHs/view?usp=sharing)
+<p align="center">
+    <a href="https://drive.google.com/file/d/1QX4YO3KV35cnioja1EpMp88NVuJafgHs/view?usp=sharing">
+        <img src="./assets/img/gif-demonstration.gif" width="700" />
+    </a>
+</p>
 
 ## Installation
 To use this API the user will need to clone this repository to their machine.
